@@ -1,0 +1,83 @@
+// Question Types
+// 1. MCQs | Multiple Choice | single
+// 2. boolean | true/false | single
+// 3. MAQs | Multiple Answers | multiple
+
+const quiz = {
+  React: {
+    topic: "React",
+    level: "Intermediate",
+    totalQuestions: 10,
+    totalScore: 20,
+    totalTime: 900,
+    questions: [
+      {
+        question: "What does JSX stand for?",
+        choices: ["JavaScript XML", "JavaScript XML Syntax", "Java XML"],
+        type: "MCQs",
+        correctAnswers: ["JavaScript XML"],
+        score: 2,
+      },
+      {
+        question: "Which one is a correct way to define a React component?",
+        choices: [
+          "class MyComponent extends React.Component",
+          "function MyComponent()",
+          "React.createMyComponent()",
+        ],
+        type: "MCQs",
+        correctAnswers: ["function MyComponent()"],
+        score: 2,
+      },
+      {
+        question: "Is React a JavaScript library for building user interfaces?",
+        choices: ["Yes", "No"],
+        type: "boolean",
+        correctAnswers: ["Yes"],
+        score: 1,
+      },
+      {
+        question: "What is the purpose of React Router?",
+        choices: [
+          "To handle routing in React applications",
+          "To create REST APIs",
+          "To manage state in React applications",
+        ],
+        type: "MCQs",
+        correctAnswers: ["To handle routing in React applications"],
+        score: 2,
+      },
+      {
+        question: "Which lifecycle method is called after a component is rendered for the first time?",
+        choices: ["componentDidMount", "componentDidUpdate", "componentWillUnmount"],
+        type: "MCQs",
+        correctAnswers: ["componentDidMount"],
+        score: 2,
+      },
+      {
+        question: "What is the purpose of Redux?",
+        choices: [
+          "To manage the state of a React application",
+          "To create user interfaces",
+          "To handle HTTP requests",
+        ],
+        type: "MCQs",
+        correctAnswers: ["To manage the state of a React application"],
+        score: 2,
+      },
+      {
+        question: "What is React primarily used for?",
+        choices: [
+          "Server-side scripting",
+          "To create user interfaces",
+          "To handle HTTP requests",
+        ],
+        type: "MCQs",
+        correctAnswers: ["Server-side scripting"],
+        score: 2,
+      },
+    ],
+  },
+};
+
+export { quiz };
