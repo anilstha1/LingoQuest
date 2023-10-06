@@ -1,5 +1,6 @@
 import "../App.css";
 import {useState} from "react";
+import SelectLanguage from './selectlanguage';
 import {Link} from "react-router-dom";
 var user;
 
@@ -22,6 +23,7 @@ function Joinchat() {
   }
   return (
     <>
+  
       <div className="login">
         <div className="box">
           <div>
@@ -50,6 +52,11 @@ function Joinchat() {
           </div>
         </div>
       </div>
+
+      <div>
+<SelectLanguage/>
+      </div>
+      
     </>
   );
 }

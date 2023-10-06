@@ -67,7 +67,7 @@ function Chat() {
 
   return (
     <>
-      <div className="login">
+      <div className="login">8
         <div className="container">
           <div className="message_output">
             {datalist.map((data) => {
