@@ -8,9 +8,20 @@ function Chat() {
   useEffect(() => {
     socket = io.connect("http://localhost:3001");
 
-    console.log("success");
     //join room
-    socket.emit("join_room", user);
+    if (user.roomcreator) {
+      const users = {
+        nickname: user.nickname,
+        room: user.room,
+      };
+      socket.emit("join_room", users);
+    } else {
+      const users = {
+        nickname: user.nickname,
+        room: user.room,
+      };
+      socket.emit("create_room", users);
+    }
 
     // receive message
     socket.on("joined", (message) => {
@@ -25,6 +36,9 @@ function Chat() {
       console.log(users);
     });
 
+    socket.on("disconnected", (user) => {
+      console.log(`${user.nickname} disconnected`);
+    });
     // socket.on("receive_message", (data) => {
     //   setdatalist([...datalist, data]);
     // });

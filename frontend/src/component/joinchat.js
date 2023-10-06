@@ -6,10 +6,18 @@ var user;
 function Joinchat() {
   const [username, setUsername] = useState("");
   const [id, setid] = useState("");
+  function create_chat() {
+    user = {
+      nickname: username,
+      room: id,
+      roomcreater: true,
+    };
+  }
   function join_chat() {
     user = {
       nickname: username,
       room: id,
+      roomcreater: false,
     };
   }
   return (
@@ -33,6 +41,9 @@ function Joinchat() {
                 setid(e.target.value);
               }}
             />
+            <Link to="/chat">
+              <button onClick={create_chat}>create chat</button>
+            </Link>
             <Link to="/chat">
               <button onClick={join_chat}>join chat</button>
             </Link>
