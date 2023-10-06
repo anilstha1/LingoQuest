@@ -10,8 +10,9 @@ app.use(cors());
 
 // console.log(questions[0]);
 
-const users = [];
-
+var users = [];
+var disconnected_user;
+var room_creator = [];
 
 function getcurrent_room_users(room) {
   const current_room_users = [];
@@ -19,6 +20,22 @@ function getcurrent_room_users(room) {
     if (user.room == room) current_room_users.push(user);
   }
   return current_room_users;
+}
+
+function find_disconnected_user(id) {
+  for (user of users) {
+    if (user.id == id) disconnected_user = user;
+
+    const newArray = users.filter((user) => user.id !== id);
+    users = newArray;
+    console.log(users[0]);
+  }
+}
+
+function get_room_creator(room) {
+  for (user of room_creator) {
+    if (user.room == room) return user;
+  }
 }
 const io = require("socket.io")(server, {
   cors: {
@@ -30,8 +47,39 @@ const io = require("socket.io")(server, {
 io.on("connection", (socket) => {
   console.log("user connected", socket.id);
 
+  socket.on("create_room", (user) => {
+    socket.join(user.room);
+    console.log(user);
+    userdata = {
+      nickname: user.nickname,
+      room: user.room,
+      id: socket.id,
+    };
+    room_creator.push(userdata);
+
+    users.push(userdata);
+    console.log(userdata);
+
+    console.log(`${user.nickname} joined room ${user.room}`);
+
+    socket.to(user.room).emit("joined", `${user.nickname} joined the chat`);
+    socket.emit("welcome", `welcome to the chat ${user.nickname}`);
+
+    const usersdata = {
+      userdata: getcurrent_room_users(user.room),
+      room_creator: get_room_creator(user.room),
+    };
+    io.to(user.room).emit("usersdata", usersdata);
+  });
+
   socket.on("join_room", (user) => {
     socket.join(user.room);
+    console.log(user);
+    user = {
+      nickname: user.nickname,
+      room: user.room,
+      id: socket.id,
+    };
     console.log("joined room", user.nickname);
     users.push(user);
 
@@ -40,12 +88,20 @@ io.on("connection", (socket) => {
 
     socket.to(user.room).emit("joined", `${user.nickname} joined the chat`);
     socket.emit("welcome", `welcome to the chat ${user.nickname}`);
-
-    io.to(user.room).emit("usersdata", getcurrent_room_users(user.room));
+    const usersdata = {
+      userdata: getcurrent_room_users(user.room),
+      room_creator: get_room_creator(user.room),
+    };
+    io.to(user.room).emit("usersdata", usersdata);
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    const id = socket.id;
+    find_disconnected_user(id);
+    console.log(disconnected_user);
+    console.log(`${disconnected_user.nickname} disconnected`);
+
+    socket.to(user.room).emit("disconnected", disconnected_user);
   });
 });
 

@@ -14,10 +14,15 @@ questions.get("/getall", async (req, res) => {
 });
 
 questions.get("/get", async (req, res) => {
+  const filter = req.headers["filter"].split(",");
+
+  console.log(filter);
   try {
-    const questions = await user.find();
-    console.log(questions);
-    res.json(questions);
+    const questions_collection = await question.find({
+      language: {$in: filter},
+    });
+    console.log(questions_collection);
+    res.json(questions_collection);
   } catch (err) {
     res.status(401).json({message: "error in opening database"});
   }
@@ -29,6 +34,7 @@ questions.post("/add", async (req, res) => {
   try {
     addquestion = new question({
       question_type: req.body.question_type,
+      language: req.body.language,
       question: req.body.question,
       options: req.body.options,
       correct_option: req.body.correct_option,
