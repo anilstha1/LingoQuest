@@ -65,10 +65,9 @@
 //     Event.preventdefault();
 //   };
 
-<<<<<<< HEAD
 //   return (
 //     <>
-//       <div className="login">
+//       <div className="login">8
 //         <div className="container">
 //           <div className="message_output">
 //             {datalist.map((data) => {
@@ -96,44 +95,12 @@
 //                 setCurrentMessage(e.target.value);
 //               }}
 //             />
-=======
-  return (
-    <>
-      <div className="login">8
-        <div className="container">
-          <div className="message_output">
-            {datalist.map((data) => {
-              return (
-                <div>
-                  {data.username === user.username ? (
-                    <div>
-                      <div className="messagelist">{data.message}</div>
-                      <div className="details">{data.time}</div>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="messagelist">{data.message}</div>
-                      <div className="details">{data.time}</div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => {
-                setCurrentMessage(e.target.value);
-              }}
-            />
->>>>>>> main
 
-//             <button onClick={sendMessage}>send</button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
+// //             <button onClick={sendMessage}>send</button>
+// //           </div>
+// //         </div>
+// //       </div>
+// //     </>
 //   );
 // }
 

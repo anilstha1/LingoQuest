@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import io from "socket.io-client";
+import Selectlanguage from "./selectlanguage";
 
 function Joinroom() {
   const [newmessage, setnewMessage] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const location = useLocation();
 
   const {state} = location;
@@ -30,6 +33,7 @@ function Joinroom() {
     });
 
     socket.on("usersdata", (users) => {
+      setUsers(users);
       console.log(users);
     });
 
@@ -46,11 +50,9 @@ function Joinroom() {
 
   return (
     <div>
-      <div>{state.name}</div>
-      {newmessage.map((message, index) => {
-        return <li key={index}>{message}</li>;
-      })}
-      <div>hello</div>
+      {/* <div>{state.name}</div> */}
+
+      <Selectlanguage messages={newmessage} users={users} />
     </div>
   );
 }

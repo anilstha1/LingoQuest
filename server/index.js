@@ -65,11 +65,7 @@ io.on("connection", (socket) => {
     socket.to(user.room).emit("joined", `${user.nickname} joined the chat`);
     socket.emit("welcome", `welcome to the chat ${user.nickname}`);
 
-    const usersdata = {
-      userdata: getcurrent_room_users(user.room),
-      room_creator: get_room_creator(user.room),
-    };
-    io.to(user.room).emit("usersdata", usersdata);
+    io.to(user.room).emit("usersdata", getcurrent_room_users(user.room));
   });
 
   socket.on("join_room", (user) => {
@@ -88,11 +84,8 @@ io.on("connection", (socket) => {
 
     socket.to(user.room).emit("joined", `${user.nickname} joined the chat`);
     socket.emit("welcome", `welcome to the chat ${user.nickname}`);
-    const usersdata = {
-      userdata: getcurrent_room_users(user.room),
-      room_creator: get_room_creator(user.room),
-    };
-    io.to(user.room).emit("usersdata", usersdata);
+
+    io.to(user.room).emit("usersdata", getcurrent_room_users(user.room));
   });
 
   socket.on("disconnect", () => {
