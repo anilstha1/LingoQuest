@@ -19,15 +19,15 @@ const containerStyles = {
   marginTop: "50px",
 };
 const nextButtonStyles = {
-  position: "absolute", // Add absolute positioning to the button
-  bottom: "20px", // Adjust the bottom position
-  right: "20px", // Adjust the right position
+  position: "absolute", 
+  bottom: "20px", 
+  right: "20px", 
 };
 const textLeftStyles = {
-  textAlign: "left", // Add left alignment for text
+  textAlign: "left", 
 };
 const textCenterStyles = {
-  textAlign: "center", // Add center alignment for text
+  textAlign: "center",
 };
 
 const questions = [
