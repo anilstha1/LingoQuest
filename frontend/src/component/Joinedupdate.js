@@ -12,7 +12,7 @@ function ChatBox({messages}) {
               message.user === "System" ? "system-message" : "user-message"
             }
           >
-            <strong>{message.user}: </strong>
+            <strong>{message.user} </strong>
             {message.text}
           </div>
         ))}

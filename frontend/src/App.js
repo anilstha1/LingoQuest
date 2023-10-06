@@ -1,6 +1,6 @@
 import "./index.css";
 import Chat from "./component/chat";
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route} from "react-router-dom"; 
 import ContributionForm from "./component/ContributionForm";
 import ActiveRoom from "./component/ActiveRoom/activeroom";
 import {BrowserRouter as Router} from "react-router-dom";
