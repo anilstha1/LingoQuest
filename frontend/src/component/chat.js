@@ -65,6 +65,7 @@
 // //     Event.preventdefault();
 // //   };
 
+<<<<<<< HEAD
 
 // //   return (
 // //     <>
@@ -97,6 +98,8 @@
 // //               }}
 // //             />
 // =======
+=======
+>>>>>>> b82612787a8489f9a1980e6af7d7d5cfc7313189
 //   return (
 //     <>
 //       <div className="login">8
@@ -127,14 +130,22 @@
 //                 setCurrentMessage(e.target.value);
 //               }}
 //             />
+<<<<<<< HEAD
 // >>>>>>> main
+=======
+>>>>>>> b82612787a8489f9a1980e6af7d7d5cfc7313189
 
 // //             <button onClick={sendMessage}>send</button>
 // //           </div>
 // //         </div>
 // //       </div>
 // //     </>
+<<<<<<< HEAD
 // //   );
 // // }
+=======
+//   );
+// }
+>>>>>>> b82612787a8489f9a1980e6af7d7d5cfc7313189
 
 // // export default Chat;
