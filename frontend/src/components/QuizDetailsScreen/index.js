@@ -8,13 +8,11 @@ import { ScreenTypes } from '../../types';
 import { convertSeconds } from '../../utils/helpers';
 import { useShuffleQuestions } from '../../hooks';
 import Button from '../ui/Button';
-import { useNavigate } from "react-router-dom";
-
-
+import {useNavigate} from "react-router-dom";
 const AppTitle = styled.h2`
   font-weight: 700;
   font-size: 32px;
-  color: ${({ theme }) => theme.colors.themeColor};
+  color: ${({theme}) => theme.colors.themeColor};
   margin-top: 34px;
 `;
 
@@ -35,9 +33,10 @@ const DetailText = styled.p`
 `;
 
 const QuizDetailsScreen = () => {
-  const { setCurrentScreen, quizDetails } = useQuiz();
+  const {setCurrentScreen, quizDetails} = useQuiz();
 
-  const { selectedQuizTopic, totalQuestions, totalScore, totalTime } = quizDetails;
+  const {selectedQuizTopic, totalQuestions, totalScore, totalTime} =
+    quizDetails;
 
   const goToQuestionScreen = () => {
     setCurrentScreen(ScreenTypes.QuestionScreen);
@@ -45,32 +44,33 @@ const QuizDetailsScreen = () => {
 
   useShuffleQuestions();
 
-  const [name, setName] = useState('');
-  const [message, setMessage] = useState('');
-
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
 
-  const hostagame = () => {
-    setMessage("Hosting the game");
-    navigate("/hostroom");
-  };
-
-  const navigate = useNavigate();
-
   const handleClick = () => {
     // Use navigate() to change the URL
-   
+  };
+
+  const hostagame = () => {
+    setMessage("Hosting the game");
+    if (name.length > 0) {
+      navigate("/hostroom", {state: {name, room: "room1"}});
+    } else {
+      return;
+    }
   };
 
   const joingame = () => {
     setMessage(`Joining a game`);
-    navigate("/joinroom")
+    navigate("/joinroom", {state: {name, room: "room1"}});
   };
 
   return (
-    <PageCenter light  justifycenter>
+    <PageCenter light justifycenter>
       <CenterCardContainer>
         <Logo />
         {/*<AppTitle>LingoQuest</AppTitle>
@@ -90,20 +90,20 @@ const QuizDetailsScreen = () => {
           </DetailText>
         </DetailTextContainer> */}
 
-<div className="App">
-      <h1>Enter Your Nickname</h1>
-      <input
-        type="text"
-        placeholder="Nickname"
-        value={name}
-        onChange={handleNameChange}
-      />
-      <br />
-      <button onClick={hostagame}>Host Game</button>
-      <button onClick={joingame}>Join a Game</button>
-      
-      <p>{message}</p>
-    </div>
+        <div className="App">
+          <h1>Enter Your Nickname</h1>
+          <input
+            type="text"
+            placeholder="Nickname"
+            value={name}
+            onChange={handleNameChange}
+          />
+          <br />
+          <button onClick={hostagame}>Host Game</button>
+          <button onClick={joingame}>Join a Game</button>
+
+          <p>{message}</p>
+        </div>
 
         <Button
           text="Start"
