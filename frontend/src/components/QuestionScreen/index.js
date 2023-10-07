@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react";
 import "./App.css";
+import axios from "axios";
+import {useUser} from "../../context/userContext";
 import styled from "styled-components";
 import {AppLogo, CheckIcon, Next, TimerIcon} from "../../config/icons";
 import {useQuiz} from "../../context/QuizContext";
@@ -89,6 +91,9 @@ const ButtonWrapper = styled.div`
 const QuestionScreen = () => {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState([]);
+  const [users, setusers] = useState([]);
+  const {userName, totalScore, changetotalScore} = useUser();
+  const [iscalled, setIscalled] = useState(true);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [isMatched, setIsMatched] = useState(false);
@@ -182,6 +187,38 @@ const QuestionScreen = () => {
     }
   }, [showTimerModal, showResultModal]);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      axios
+        .get("http://localhost:8000/users/get")
+        .then((response) => {
+          // Handle the successful response here
+          console.log("Data:", response.data);
+          const userdata = response.data;
+
+          const uniqueNicknames = {};
+          const result = [];
+
+          for (const obj of userdata) {
+            if (!uniqueNicknames[obj.nickname]) {
+              uniqueNicknames[obj.nickname] = true;
+              result.push(obj);
+            }
+          }
+          console.log(result);
+          setusers(result);
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error("Error:", error);
+        });
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [users]);
+
   useTimer(
     timer,
     quizDetails,
@@ -190,10 +227,49 @@ const QuestionScreen = () => {
     setShowTimerModal,
     showResultModal
   );
+  const increase_score = () => {
+    if (iscalled) {
+      console.log("increase score called");
+      changetotalScore(totalScore + 10);
+      // totalScore += 10;
+      const user = {
+        nickname: userName,
+        room: "123",
+        totalScore: totalScore,
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(user), // Convert data to JSON format
+      };
+
+      // Make the POST request
+      fetch("http://localhost:8000/users/add", requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Parse the response JSON if needed
+        })
+        .then((data) => {
+          // Handle the successful response and JSON data here
+          console.log("Data:", data);
+        })
+        .catch((error) => {
+          // Handle any errors that occurred during the request
+          console.error("Error:", error);
+        });
+      setIscalled(false);
+    }
+  };
 
   return (
     <div class="container">
       <div class="code">
+        {userName}
         <PageCenter>
           <LogoContainer>
             <AppLogo />
@@ -223,6 +299,7 @@ const QuestionScreen = () => {
               />
             </ButtonWrapper>
           </QuizContainer>
+          {isMatched && increase_score()}
           {isMatched && (
             <Modal
               show={handleShowModal}
@@ -258,18 +335,14 @@ const QuestionScreen = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>John Doe</td>
-              <td>0</td>
-            </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td>0</td>
-            </tr>
-            <tr>
-              <td>Bob Johnson</td>
-              <td>0</td>
-            </tr>
+            {users.map((user) => {
+              return (
+                <tr>
+                  <td>{user.nickname}</td>
+                  <td>{user.totalScore}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
