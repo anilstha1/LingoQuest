@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(cors({origin: "http://localhost:3000", credentials: true}));
 
 app.listen(8000);
-
 const questionChangeStream = user.watch();
 
 // Listen for change events
@@ -32,6 +31,9 @@ questionChangeStream.on("change", (change) => {
   //     const deletedDocument = change.documentKey;
   //     console.log('Document deleted:', deletedDocument);
   //   }
+});
+questionChangeStream.on("insert", (change) => {
+  console.log("Insert event:", change);
 });
 
 app.use("/questions", questions);
