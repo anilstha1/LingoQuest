@@ -3,229 +3,26 @@
 // 2. boolean | true/false | single
 // 3. MAQs | Multiple Answers | multiple
 
-const quiz = {
-  Newari: {
-    topic: "Newari",
-    level: "Intermediate",
-    totalQuestions: 10,
-    totalScore: 20,
-    totalTime: 900,
-    questions: [
-      {
-        question: "What does JSX stand for?",
-        choices: ["JavaScript XML", "JavaScript XML Syntax", "Java XML"],
-        type: "MCQs",
-        correctAnswers: ["JavaScript XML"],
-        score: 2,
-      },
-      {
-        question: "Which one is a correct way to define a React component?",
-        choices: [
-          "class MyComponent extends React.Component",
-          "function MyComponent()",
-          "React.createMyComponent()",
-        ],
-        type: "MCQs",
-        correctAnswers: ["function MyComponent()"],
-        score: 2,
-      },
-      {
-        question: "Is React a JavaScript library for building user interfaces?",
-        choices: ["Yes", "No"],
-        type: "boolean",
-        correctAnswers: ["Yes"],
-        score: 1,
-      },
-      {
-        question: "What is the purpose of React Router?",
-        choices: [
-          "To handle routing in React applications",
-          "To create REST APIs",
-          "To manage state in React applications",
-        ],
-        type: "MCQs",
-        correctAnswers: ["To handle routing in React applications"],
-        score: 2,
-      },
-      {
-        question: "Which lifecycle method is called after a component is rendered for the first time?",
-        choices: ["componentDidMount", "componentDidUpdate", "componentWillUnmount"],
-        type: "MCQs",
-        correctAnswers: ["componentDidMount"],
-        score: 2,
-      },
-      {
-        question: "What is the purpose of Redux?",
-        choices: [
-          "To manage the state of a React application",
-          "To create user interfaces",
-          "To handle HTTP requests",
-        ],
-        type: "MCQs",
-        correctAnswers: ["To manage the state of a React application"],
-        score: 2,
-      },
-      {
-        question: "What is React primarily used for?",
-        choices: [
-          "Server-side scripting",
-          "To create user interfaces",
-          "To handle HTTP requests",
-        ],
-        type: "MCQs",
-        correctAnswers: ["Server-side scripting"],
-        score: 2,
-      },
-    ],
-  },
-  Bhojpuri: {
-    topic: "Bhojpuri",
-    level: "Intermediate",
-    totalQuestions: 10,
-    totalScore: 20,
-    totalTime: 900,
-    questions: [
-      {
-        question: "What does this stand for?",
-        choices: ["JavaScript XML", "JavaScript XML Syntax", "Java XML"],
-        type: "MCQs",
-        correctAnswers: ["JavaScript XML"],
-        score: 2,
-      },
-      {
-        question: "Which one is a correct way to define a React component?",
-        choices: [
-          "class MyComponent extends React.Component",
-          "function MyComponent()",
-          "React.createMyComponent()",
-        ],
-        type: "MCQs",
-        correctAnswers: ["function MyComponent()"],
-        score: 2,
-      },
-      {
-        question: "Is React a JavaScript library for building user interfaces?",
-        choices: ["Yes", "No"],
-        type: "boolean",
-        correctAnswers: ["Yes"],
-        score: 1,
-      },
-      {
-        question: "What is the purpose of React Router?",
-        choices: [
-          "To handle routing in React applications",
-          "To create REST APIs",
-          "To manage state in React applications",
-        ],
-        type: "MCQs",
-        correctAnswers: ["To handle routing in React applications"],
-        score: 2,
-      },
-      {
-        question: "Which lifecycle method is called after a component is rendered for the first time?",
-        choices: ["componentDidMount", "componentDidUpdate", "componentWillUnmount"],
-        type: "MCQs",
-        correctAnswers: ["componentDidMount"],
-        score: 2,
-      },
-      {
-        question: "What is the purpose of Redux?",
-        choices: [
-          "To manage the state of a React application",
-          "To create user interfaces",
-          "To handle HTTP requests",
-        ],
-        type: "MCQs",
-        correctAnswers: ["To manage the state of a React application"],
-        score: 2,
-      },
-      {
-        question: "What is React primarily used for?",
-        choices: [
-          "Server-side scripting",
-          "To create user interfaces",
-          "To handle HTTP requests",
-        ],
-        type: "MCQs",
-        correctAnswers: ["Server-side scripting"],
-        score: 2,
-      },
-    ],
-  },
-  Magari: {
-    topic: "Magari",
-    level: "Intermediate",
-    totalQuestions: 10,
-    totalScore: 20,
-    totalTime: 900,
-    questions: [
-      {
-        question: "What does baje stand for?",
-        choices: ["JavaScript XML", "JavaScript XML Syntax", "Java XML"],
-        type: "MCQs",
-        correctAnswers: ["JavaScript XML"],
-        score: 2,
-      },
-      {
-        question: "Which one is a correct way to define a React component?",
-        choices: [
-          "class MyComponent extends React.Component",
-          "function MyComponent()",
-          "React.createMyComponent()",
-        ],
-        type: "MCQs",
-        correctAnswers: ["function MyComponent()"],
-        score: 2,
-      },
-      {
-        question: "Is React a JavaScript library for building user interfaces?",
-        choices: ["Yes", "No"],
-        type: "boolean",
-        correctAnswers: ["Yes"],
-        score: 1,
-      },
-      {
-        question: "What is the purpose of React Router?",
-        choices: [
-          "To handle routing in React applications",
-          "To create REST APIs",
-          "To manage state in React applications",
-        ],
-        type: "MCQs",
-        correctAnswers: ["To handle routing in React applications"],
-        score: 2,
-      },
-      {
-        question: "Which lifecycle method is called after a component is rendered for the first time?",
-        choices: ["componentDidMount", "componentDidUpdate", "componentWillUnmount"],
-        type: "MCQs",
-        correctAnswers: ["componentDidMount"],
-        score: 2,
-      },
-      {
-        question: "What is the purpose of Redux?",
-        choices: [
-          "To manage the state of a React application",
-          "To create user interfaces",
-          "To handle HTTP requests",
-        ],
-        type: "MCQs",
-        correctAnswers: ["To manage the state of a React application"],
-        score: 2,
-      },
-      {
-        question: "What is React primarily used for?",
-        choices: [
-          "Server-side scripting",
-          "To create user interfaces",
-          "To handle HTTP requests",
-        ],
-        type: "MCQs",
-        correctAnswers: ["Server-side scripting"],
-        score: 2,
-      },
-    ],
-  },
-};
+var quiz;
+
+async function fetchAndSetQuizData() {
+  try {
+    const response = await fetch("http://localhost:8000/questions/getall");
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch quiz data. Status code: ${response.status}`
+      );
+    }
+
+    const questions = await response.json();
+    quiz = JSON.parse(questions);
+    console.log(quiz);
+  } catch (error) {
+    console.error("Error fetching quiz data:", error);
+  }
+}
+
+// Call the function to fetch and update quiz data
+export {fetchAndSetQuizData};
 
 export { quiz };

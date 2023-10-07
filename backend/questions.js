@@ -7,7 +7,29 @@ questions.get("/getall", async (req, res) => {
   try {
     const questions_collection = await question.find();
     console.log(questions_collection);
-    res.json(questions_collection);
+    const questionsByLanguage = {};
+
+    questions_collection.forEach((item) => {
+      const {question_type, language, question, options, correct_option} = item;
+
+      // If the language key doesn't exist in the 'questionsByLanguage' object, create an empty array for it.
+      if (!questionsByLanguage[language]) {
+        questionsByLanguage[language] = [];
+      }
+
+      // Push an object containing both the question and language into the corresponding language array.
+      questionsByLanguage[language].push({
+        question_type,
+        language,
+        question,
+        options,
+        correct_option,
+      });
+    });
+
+    console.log(questionsByLanguage);
+
+    res.json(questionsByLanguage);
   } catch (err) {
     res.status(401).json({message: "error in opening database"});
   }
