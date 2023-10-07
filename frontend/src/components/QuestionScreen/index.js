@@ -1,23 +1,43 @@
+import React, {useState, useEffect} from "react";
+import "./App.css";
+import styled from "styled-components";
+import {AppLogo, CheckIcon, Next, TimerIcon} from "../../config/icons";
+import {useQuiz} from "../../context/QuizContext";
+import {useTimer} from "../../hooks";
+import {device} from "../../styles/BreakPoints";
+import {PageCenter} from "../../styles/Global";
+import {ScreenTypes} from "../../types";
+import Button from "../ui/Button";
+import ModalWrapper from "../ui/ModalWrapper";
+import Question from "./Question";
+import QuizHeader from "./QuizHeader";
+import Modal from "./Modal";
 
+const CenteredModal = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import styled from 'styled-components';
-import { AppLogo, CheckIcon, Next, TimerIcon } from '../../config/icons';
-import { useQuiz } from '../../context/QuizContext';
-import { useTimer } from '../../hooks';
-import { device } from '../../styles/BreakPoints';
-import { PageCenter } from '../../styles/Global';
-import { ScreenTypes } from '../../types';
-import Button from '../ui/Button';
-import ModalWrapper from '../ui/ModalWrapper';
-import Question from './Question';
-import QuizHeader from './QuizHeader';
+  &.modal-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+`;
 
 const QuizContainer = styled.div`
   width: 900px;
   min-height: 500px;
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({theme}) => theme.colors.white};
   border-radius: 4px;
   padding: 10px 60px 80px 60px;
   margin-bottom: 70px;
@@ -30,8 +50,10 @@ const QuizContainer = styled.div`
     span {
       svg {
         path {
-          fill: ${({ selectedAnswer, theme }) =>
-            selectedAnswer ? `${theme.colors.white}` : `${theme.colors.darkGrayText}`};
+          fill: ${({selectedAnswer, theme}) =>
+            selectedAnswer
+              ? `${theme.colors.white}`
+              : `${theme.colors.darkGrayText}`};
         }
       }
     }
@@ -40,7 +62,7 @@ const QuizContainer = styled.div`
 
 const LogoContainer = styled.div`
   margin-top: 5px;
-  margin-bottom:20px;
+  margin-bottom: 20px;
   @media ${device.md} {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -69,7 +91,8 @@ const QuestionScreen = () => {
   const [selectedAnswer, setSelectedAnswer] = useState([]);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
-
+  const [isMatched, setIsMatched] = useState(false);
+  const [isNotmatched, setIsNotMatched] = useState(false);
   const {
     questions,
     setQuestions,
@@ -84,14 +107,16 @@ const QuestionScreen = () => {
 
   const currentQuestion = questions[activeQuestion];
 
-  const { question, type, choices, correctAnswers } = currentQuestion;
+  const {question, type, choices, correctAnswers} = currentQuestion;
 
   const onClickNext = () => {
     const isMatch =
       selectedAnswer.length === correctAnswers.length &&
       selectedAnswer.every((answer) => correctAnswers.includes(answer));
 
-    setResult([...result, { ...currentQuestion, selectedAnswer, isMatch }]);
+    setResult([...result, {...currentQuestion, selectedAnswer, isMatch}]);
+    setIsMatched(isMatch);
+    setIsNotMatched(!isMatch);
 
     if (activeQuestion !== questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
@@ -104,9 +129,14 @@ const QuestionScreen = () => {
   };
 
   const handleAnswerSelection = (e) => {
-    const { name, checked } = e.target;
+    const {name, checked} = e.target;
 
-    if (type === 'MCQs' || type === 'boolean') {
+    if (
+      type === "MCQs" ||
+      type === "boolean" ||
+      type === "image" ||
+      type === "audio"
+    ) {
       if (checked) {
         setSelectedAnswer([name]);
       }
@@ -115,86 +145,136 @@ const QuestionScreen = () => {
 
   const handleModal = () => {
     setCurrentScreen(ScreenTypes.ResultScreen);
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = "auto";
+  };
+  const handleShowModal = () => {
+    setIsMatched(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsMatched(false);
+  };
+  const handleshowmodelcorrect = () => {
+    setIsNotMatched(true);
+  };
+  const handleclosemodelcorrect = () => {
+    setIsNotMatched(false);
   };
 
   useEffect(() => {
+    if (isMatched) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Allow scrolling
+    }
+  }, [isMatched]);
+  useEffect(() => {
+    if (isNotmatched) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Allow scrolling
+    }
+  }, [isNotmatched]);
+
+  useEffect(() => {
     if (showTimerModal || showResultModal) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
   }, [showTimerModal, showResultModal]);
 
-  useTimer(timer, quizDetails, setEndTime, setTimer, setShowTimerModal, showResultModal);
+  useTimer(
+    timer,
+    quizDetails,
+    setEndTime,
+    setTimer,
+    setShowTimerModal,
+    showResultModal
+  );
 
   return (
     <div class="container">
       <div class="code">
-    <PageCenter>
-      <LogoContainer>
-        <AppLogo />
-      </LogoContainer>
-      <QuizContainer selectedAnswer={selectedAnswer.length > 0}>
-        <QuizHeader
-          activeQuestion={activeQuestion}
-          totalQuestions={quizDetails.totalQuestions}
-          timer={timer}
-        />
-        <Question
-          question={question}
-          choices={choices}
-          type={type}
-          handleAnswerSelection={handleAnswerSelection}
-          selectedAnswer={selectedAnswer}
-        />
-        <ButtonWrapper>
-          <Button
-            text={activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
-            onClick={onClickNext}
-            icon={<Next />}
-            iconPosition="right"
-            disabled={selectedAnswer.length === 0}
-          />
-        </ButtonWrapper>
-      </QuizContainer>
-      {(showTimerModal || showResultModal) && (
-        <ModalWrapper
-          title={showResultModal ? 'Done!' : 'Your time is up!'}
-          subtitle={`You have attempted ${result.length} questions in total.`}
-          onClick={handleModal}
-          icon={showResultModal ? <CheckIcon /> : <TimerIcon />}
-          buttonTitle="SHOW RESULT"
-        />
-      )}
-    </PageCenter>
-    </div>
+        <PageCenter>
+          <LogoContainer>
+            <AppLogo />
+          </LogoContainer>
+          <QuizContainer selectedAnswer={selectedAnswer.length > 0}>
+            <QuizHeader
+              activeQuestion={activeQuestion}
+              totalQuestions={quizDetails.totalQuestions}
+              timer={timer}
+            />
+            <Question
+              question={question}
+              choices={choices}
+              type={type}
+              handleAnswerSelection={handleAnswerSelection}
+              selectedAnswer={selectedAnswer}
+            />
+            <ButtonWrapper>
+              <Button
+                text={
+                  activeQuestion === questions.length - 1 ? "Finish" : "Next"
+                }
+                onClick={onClickNext}
+                icon={<Next />}
+                iconPosition="right"
+                disabled={selectedAnswer.length === 0}
+              />
+            </ButtonWrapper>
+          </QuizContainer>
+          {isMatched && (
+            <Modal
+              show={handleShowModal}
+              onClose={handleCloseModal}
+              status={1}
+            />
+          )}
+          {isNotmatched && (
+            <Modal
+              show={handleshowmodelcorrect}
+              onClose={handleclosemodelcorrect}
+              status={0}
+            />
+          )}
+          {(showTimerModal || showResultModal) && (
+            <ModalWrapper
+              title={showResultModal ? "Done!" : "Your time is up!"}
+              subtitle={`You have attempted ${result.length} questions in total.`}
+              onClick={handleModal}
+              icon={showResultModal ? <CheckIcon /> : <TimerIcon />}
+              buttonTitle="SHOW RESULT"
+            />
+          )}
+        </PageCenter>
+      </div>
 
-<div className="table">
-    <table>
-            <thead>
-                <tr>
-                    <th>Players Name</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>John Doe</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Bob Johnson</td>
-                    <td>0</td>
-                </tr>
-            </tbody>
+      <div className="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Players Name</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Bob Johnson</td>
+              <td>0</td>
+            </tr>
+          </tbody>
         </table>
-        </div>
+      </div>
     </div>
   );
 };
 
 export default QuestionScreen;
-

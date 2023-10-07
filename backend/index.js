@@ -15,9 +15,13 @@ app.listen(8000);
 const questionChangeStream = user.watch();
 
 // Listen for change events
-questionChangeStream.on("change", (change) => {
-  console.log("Change in database:", change);
+questionChangeStream.on("change", (event) => {
+  // console.log("Change in database:", change);
+  const operationType = event["operationType"];
+  const document = event["fullDocument"];
 
+  // Print the details of the change
+  console.log(`${operationType}: ${document}`);
   //   if (change.operationType === 'insert') {
   //     // Handle new document insertion
   //     const newDocument = change.fullDocument;
