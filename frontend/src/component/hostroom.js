@@ -54,7 +54,12 @@ function Hostroom() {
         return <div>{message}</div>;
       })}
       <div>hello</div> */}
-      <Selectlanguage messages={newmessage} users={users} />
+      <Selectlanguage
+        messages={newmessage}
+        user={user}
+        users={users}
+        room_creator={true}
+      />
     </div>
   );
 }

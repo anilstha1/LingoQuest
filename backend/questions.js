@@ -1,33 +1,34 @@
 const express = require("express");
 const question = require("./models/question.js");
+const quiz = require("./models/quiz.js");
+
 const questions = express.Router();
 
 // get user
 questions.get("/getall", async (req, res) => {
   try {
-    const questions_collection = await question.find();
+    const questions_collection = await quiz.find();
     console.log(questions_collection);
+    // console.log(questions_collection);
     const questionsByLanguage = {};
 
     questions_collection.forEach((item) => {
-      const {question_type, language, question, options, correct_option} = item;
+      const {topic, level, totalQuestions, totalTime, questions} = item;
 
       // If the language key doesn't exist in the 'questionsByLanguage' object, create an empty array for it.
-      if (!questionsByLanguage[language]) {
-        questionsByLanguage[language] = [];
+      if (!questionsByLanguage[topic]) {
+        questionsByLanguage[topic] = {
+          topic,
+          level,
+          totalQuestions,
+          totalTime,
+          questions: [],
+        };
       }
-
-      // Push an object containing both the question and language into the corresponding language array.
-      questionsByLanguage[language].push({
-        question_type,
-        language,
-        question,
-        options,
-        correct_option,
-      });
+      questionsByLanguage[topic].questions.push(questions);
     });
 
-    console.log(questionsByLanguage);
+    // console.log(questionsByLanguage);
 
     res.json(questionsByLanguage);
   } catch (err) {
@@ -54,16 +55,25 @@ questions.get("/get", async (req, res) => {
 questions.post("/add", async (req, res) => {
   console.log(req.body);
   try {
+    const questions_collection = await quiz.find();
+
     addquestion = new question({
-      question_type: req.body.question_type,
-      language: req.body.language,
       question: req.body.question,
-      options: req.body.options,
-      correct_option: req.body.correct_option,
+      choices: req.body.choices,
+      type: req.body.type,
+      correctAnswers: req.body.correctAnswers,
+      description: req.body.description,
     });
-    await addquestion.save();
+
+    addquiz = new quiz({
+      topic: req.body.topic,
+      questions: addquestion,
+    });
+    addquiz.save();
     console.log(addquestion);
-    res.status(200).json(addquestion);
+    console.log(addquiz);
+
+    res.status(200).json(addquiz);
   } catch (err) {
     res.status(400).json({message: err});
   }

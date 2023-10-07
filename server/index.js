@@ -49,7 +49,6 @@ io.on("connection", (socket) => {
 
   socket.on("create_room", (user) => {
     socket.join(user.room);
-    console.log(user);
     userdata = {
       nickname: user.nickname,
       room: user.room,
@@ -65,6 +64,10 @@ io.on("connection", (socket) => {
     socket.to(user.room).emit("joined", `${user.nickname} joined the chat`);
     socket.emit("welcome", `welcome to the chat ${user.nickname}`);
 
+    socket.on("start_quiz", (user) => {
+      console.log(`${user.nickname} started quiz`);
+      socket.to(user.room).emit("startquiz");
+    });
     io.to(user.room).emit("usersdata", getcurrent_room_users(user.room));
   });
 
@@ -80,7 +83,7 @@ io.on("connection", (socket) => {
     users.push(user);
 
     console.log(user);
-    console.log(`${user.nickname} joined room ${user.room}`);
+    console.log(`${user} joined room ${user.room}`);
 
     socket.to(user.room).emit("joined", `${user.nickname} joined the chat`);
     socket.emit("welcome", `welcome to the chat ${user.nickname}`);

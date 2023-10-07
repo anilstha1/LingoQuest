@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from "react";
 import "./Forlanguageselect.css"; // Import your CSS file
-import { useQuiz } from '../context/QuizContext';
-import { ScreenTypes } from '../types';
-import { useNavigate } from 'react-router-dom';
-const Selectlanguage = ({messages, users}) => {
+import {useQuiz} from "../context/QuizContext";
+import {ScreenTypes} from "../types";
+import {useNavigate} from "react-router-dom";
+import io from "socket.io-client";
+
+// const socket = io.connect("http://localhost:3001");
+
+const Selectlanguage = ({messages, user, users, room_creator}) => {
   const [selectedButton, setSelectedButton] = useState(null);
-  const { setCurrentScreen, quizDetails, selectQuizTopic, currentScreen } = useQuiz();
+  const [startquiz, setStartquiz] = useState(false);
+  const {setCurrentScreen, quizDetails, selectQuizTopic, currentScreen} =
+    useQuiz();
 
   const {selectedQuizTopic, totalQuestions, totalScore, totalTime} =
     quizDetails;
-    const Navigate = useNavigate();
+  const navigate = useNavigate();
+
+  console.log(users);
+
   const handleQuestionScreen = () => {
-    console.log("screen type to Questionscreen");
-    console.log(currentScreen);
-    Navigate('/')
+    const socket = io.connect("http://localhost:3001");
+    socket.emit("create_room", user);
+    socket.emit("start_quiz", user);
 
     setCurrentScreen(ScreenTypes.QuestionScreen);
     console.log(currentScreen);
+    navigate("/");
+  };
 
-  }
-  console.log(users);
   const handleButtonClick = (buttonName) => {
     selectQuizTopic(buttonName);
     console.log(buttonName);
-
   };
   return (
     <>
@@ -72,12 +80,12 @@ const Selectlanguage = ({messages, users}) => {
           </button>
         </div>
       </div>
-      
+
       <div class="Person-joined">
         <table class="person-table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Players in the room</th>
             </tr>
           </thead>
           <tbody>
@@ -90,11 +98,12 @@ const Selectlanguage = ({messages, users}) => {
         </table>
       </div>
 
-
       <div>
-        <button className="button" onClick={handleQuestionScreen}>
-          Start
-        </button>
+        {room_creator && (
+          <button className="button" onClick={handleQuestionScreen}>
+            Start
+          </button>
+        )}
       </div>
 
       <div className="chat-box">
@@ -110,4 +119,4 @@ const Selectlanguage = ({messages, users}) => {
   );
 };
 
-export default Selectlanguage ;
+export default Selectlanguage;
