@@ -12,10 +12,17 @@ function Main() {
   const { currentScreen, setCurrentScreen } = useQuiz();
 
   useEffect(() => {
-    setTimeout(() => {
+    let timeoutDuration = 1000; 
+  
+    if (currentScreen === ScreenTypes.QuestionScreen || currentScreen === ScreenTypes.ResultScreen) {
+      timeoutDuration = 100000; 
+    }
+    const timeout = setTimeout(() => {
       setCurrentScreen(ScreenTypes.QuizDetailsScreen);
-    }, 1000);
-  }, [setCurrentScreen]);
+    }, timeoutDuration);
+  
+    return () => clearTimeout(timeout);
+  }, [currentScreen, setCurrentScreen]);
 
   const screenComponents = {
     [ScreenTypes.SplashScreen]: SplashScreen(),

@@ -9,12 +9,7 @@ const Mainframe = () => (
   <div>
   
 
- <ThemeProvider theme={AppTheme}>
-  <GlobalStyles />
-    <QuizProvider>
-      <Main />
-     </QuizProvider>
-   </ThemeProvider>
+ <Main/>
 
   </div>
 )

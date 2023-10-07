@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 import "./Forlanguageselect.css"; // Import your CSS file
-
+import { useQuiz } from '../context/QuizContext';
+import { ScreenTypes } from '../types';
+import { useNavigate } from 'react-router-dom';
 const Selectlanguage = ({messages, users}) => {
   const [selectedButton, setSelectedButton] = useState(null);
+  const { setCurrentScreen, quizDetails, selectQuizTopic, currentScreen } = useQuiz();
+
+  const {selectedQuizTopic, totalQuestions, totalScore, totalTime} =
+    quizDetails;
+    const Navigate = useNavigate();
+  const handleQuestionScreen = () => {
+    console.log("screen type to Questionscreen");
+    console.log(currentScreen);
+    Navigate('/')
+
+    setCurrentScreen(ScreenTypes.QuestionScreen);
+    console.log(currentScreen);
+
+  }
   console.log(users);
   const handleButtonClick = (buttonName) => {
-    setSelectedButton(buttonName);
+    selectQuizTopic(buttonName);
+    console.log(buttonName);
+
   };
   return (
     <>
@@ -70,6 +88,13 @@ const Selectlanguage = ({messages, users}) => {
             ))}
           </tbody>
         </table>
+      </div>
+
+
+      <div>
+        <button className="button" onClick={handleQuestionScreen}>
+          Start
+        </button>
       </div>
 
       <div className="chat-box">

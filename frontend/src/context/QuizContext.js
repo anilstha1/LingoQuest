@@ -6,7 +6,7 @@ import { Result, ScreenTypes } from '../types';
 const initialState = {
   currentScreen: ScreenTypes.SplashScreen,
   setCurrentScreen: () => {},
-  quizTopic: 'React',
+  quizTopic: 'Newari',
   selectQuizTopic: () => {},
   questions: [],
   setQuestions: () => {},
@@ -20,7 +20,7 @@ const initialState = {
     totalQuestions: 0,
     totalScore: 0,
     totalTime: 0,
-    selectedQuizTopic: 'Python',
+    selectedQuizTopic: 'Newari',
   },
 };
 
@@ -61,6 +61,7 @@ const QuizProvider = ({ children }) => {
     totalScore,
     totalTime,
     selectedQuizTopic: quizTopic,
+    
   };
 
   const quizContextValue = {
