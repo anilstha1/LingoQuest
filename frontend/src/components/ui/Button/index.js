@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { ButtonStyle, IconLeft, IconRight } from './styled';
 

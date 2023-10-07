@@ -18,17 +18,7 @@ const quiz = {
         correctAnswers: ["JavaScript XML"],
         score: 2,
       },
-      {
-        question: "Which one is a correct way to define a React component?",
-        choices: [
-          "class MyComponent extends React.Component",
-          "function MyComponent()",
-          "React.createMyComponent()",
-        ],
-        type: "MCQs",
-        correctAnswers: ["function MyComponent()"],
-        score: 2,
-      },
+   
       {
         question: "Is React a JavaScript library for building user interfaces?",
         choices: ["Yes", "No"],
@@ -48,6 +38,17 @@ const quiz = {
         score: 2,
       },
       {
+        question: "https://images.unsplash.com/photo-1682687980961-78fa83781450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2187&q=80",
+        choices: [
+          "class MyComponent extends React.Component",
+          "function MyComponent()",
+          "React.createMyComponent()",
+        ],
+        type: "image",
+        correctAnswers: ["function MyComponent()"],
+        score: 2,
+      },
+      {
         question: "Which lifecycle method is called after a component is rendered for the first time?",
         choices: ["componentDidMount", "componentDidUpdate", "componentWillUnmount"],
         type: "MCQs",
@@ -55,13 +56,13 @@ const quiz = {
         score: 2,
       },
       {
-        question: "What is the purpose of Redux?",
+        question: "https://drive.google.com/file/d/1vVaYaOVI-nwyF6PNXm9TPbFmX6UHM_9y/view?usp=sharing",
         choices: [
           "To manage the state of a React application",
           "To create user interfaces",
           "To handle HTTP requests",
         ],
-        type: "MCQs",
+        type: "audio",
         correctAnswers: ["To manage the state of a React application"],
         score: 2,
       },
@@ -228,4 +229,4 @@ const quiz = {
   },
 };
 
-export { quiz };
+export {quiz };
