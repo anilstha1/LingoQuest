@@ -29,7 +29,7 @@ const users = express.Router();
 users.get("/get", async (req, res) => {
   try {
     const usersdata = await user.find();
-    console.log(usersdata);
+    // console.log(usersdata);
 
     res.json(usersdata);
   } catch (err) {
