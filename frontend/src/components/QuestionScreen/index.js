@@ -267,8 +267,8 @@ const QuestionScreen = () => {
   };
 
   return (
-    <div class="container">
-      <div class="code">
+    <div className="container">
+      <div className="code">
         {userName}
         <PageCenter>
           <LogoContainer>

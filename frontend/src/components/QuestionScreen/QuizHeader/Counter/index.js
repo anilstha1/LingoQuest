@@ -17,10 +17,16 @@ const TimerStyle = styled.span`
   }
 `;
 
-const Counter = ({ time }) => {
+const Loader = styled.img`
+  width: 44px; // Adjust the size as needed
+  height: 44px; // Adjust the size as needed
+  margin-right: 8px;
+`;
+
+const Counter = ({time}) => {
   return (
-    <Flex center>
-      <TimerIcon />
+    <Flex center={"center"}>
+      <Loader src={""} alt="Loading..." />
       <TimerStyle>{time}</TimerStyle>
     </Flex>
   );

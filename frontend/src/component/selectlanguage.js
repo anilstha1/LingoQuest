@@ -95,8 +95,8 @@ const Selectlanguage = ({messages, user, users, room_creator}) => {
         </div>
       </div>
 
-      <div class="Person-joined">
-        <table class="person-table">
+      <div className="Person-joined">
+        <table className="person-table">
           <thead>
             <tr>
               <th>Players in the room</th>
