@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import styled from 'styled-components';
@@ -13,6 +11,28 @@ import Button from '../ui/Button';
 import ModalWrapper from '../ui/ModalWrapper';
 import Question from './Question';
 import QuizHeader from './QuizHeader';
+import Modal from './Modal';
+
+const CenteredModal = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+
+  &.modal-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+`;
 
 const QuizContainer = styled.div`
   width: 900px;
@@ -69,7 +89,8 @@ const QuestionScreen = () => {
   const [selectedAnswer, setSelectedAnswer] = useState([]);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
-
+  const [isMatched, setIsMatched] = useState(false);
+  const [isNotmatched, setIsNotMatched] = useState(false);
   const {
     questions,
     setQuestions,
@@ -92,6 +113,8 @@ const QuestionScreen = () => {
       selectedAnswer.every((answer) => correctAnswers.includes(answer));
 
     setResult([...result, { ...currentQuestion, selectedAnswer, isMatch }]);
+    setIsMatched(isMatch)
+    setIsNotMatched(!isMatch)
 
     if (activeQuestion !== questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
@@ -106,7 +129,7 @@ const QuestionScreen = () => {
   const handleAnswerSelection = (e) => {
     const { name, checked } = e.target;
 
-    if (type === 'MCQs' || type === 'boolean') {
+    if (type === 'MCQs' || type === 'boolean'|| type==='image'|| type==='audio') {
       if (checked) {
         setSelectedAnswer([name]);
       }
@@ -117,6 +140,34 @@ const QuestionScreen = () => {
     setCurrentScreen(ScreenTypes.ResultScreen);
     document.body.style.overflow = 'auto';
   };
+  const handleShowModal = () => {
+    setIsMatched(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsMatched(false);
+  };
+  const handleshowmodelcorrect = () => {
+    setIsNotMatched(true);
+  }
+  const handleclosemodelcorrect = () => {
+    setIsNotMatched(false);
+  }
+
+  useEffect(() => {
+    if (isMatched) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    } else {
+      document.body.style.overflow = 'auto'; // Allow scrolling
+    }
+  }, [isMatched]);
+  useEffect(() => {
+    if (isNotmatched) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    } else {
+      document.body.style.overflow = 'auto'; // Allow scrolling
+    }
+  }, [isNotmatched]);
 
   useEffect(() => {
     if (showTimerModal || showResultModal) {
@@ -156,6 +207,14 @@ const QuestionScreen = () => {
           />
         </ButtonWrapper>
       </QuizContainer>
+      {(isMatched) && (
+        <Modal show={handleShowModal} onClose={handleCloseModal} status={1}/>
+
+      )}
+      {(isNotmatched) && (
+        <Modal show={handleshowmodelcorrect} onClose={handleclosemodelcorrect} status={0}/>
+        
+      )}
       {(showTimerModal || showResultModal) && (
         <ModalWrapper
           title={showResultModal ? 'Done!' : 'Your time is up!'}

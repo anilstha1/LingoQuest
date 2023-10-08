@@ -38,11 +38,13 @@ const Answer = ({ onChange, index, choice, type, selectedAnswer }) => {
         <ChoiceLabel>{label}.</ChoiceLabel>
         <input
           name={choice}
-          type={type === 'MAQs' ? 'checkbox' : 'radio'}
+          type="radio"
           checked={selectedAnswer.includes(choice)}
+
           onChange={onChange}
         />
         {choice}
+        {console.log(selectedAnswer)}
       </AnswerLabel>
     </AnswerStyle>
   );
