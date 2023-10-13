@@ -11,6 +11,7 @@ import {ThemeProvider} from "styled-components";
 import QuizProvider from "./context/QuizContext";
 import {GlobalStyles} from "./styles/Global";
 import {theme as AppTheme} from "./styles/Theme";
+import {UserProvider} from "./context/userContext";
 function App() {
   return (
     <ThemeProvider theme={AppTheme}>
