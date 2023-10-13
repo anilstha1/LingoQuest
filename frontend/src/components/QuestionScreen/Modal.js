@@ -80,6 +80,7 @@ const ShiningText = styled.div`
   font-size: 40px;
 `;
 
+
 const Modal = ({show, onClose, children, status, description}) => {
   const [visible, setVisible] = useState(true);
 
@@ -92,6 +93,20 @@ const Modal = ({show, onClose, children, status, description}) => {
   //       }, 5000);
   //     }
   //   }, [show, onClose]);
+=======
+const Modal = ({ show, onClose, children ,status}) => {
+  const [visible, setVisible] = useState(true);
+
+//   useEffect(() => {
+//     if (show) {
+//       setTimeout(() => {
+//         setVisible(false);
+//         onClose();
+//         setDescriptionModal(true);
+//       }, 5000);
+//     }
+//   }, [show, onClose]);
+
 
   const closeModal = () => {
     setVisible(true);
@@ -103,6 +118,7 @@ const Modal = ({show, onClose, children, status, description}) => {
       {visible && (
         <ModalContent>
           <LeftSide>
+
             {status && (
               <>
                 <GifImage src={congratsgif} alt="Animated GIF" />
@@ -124,6 +140,20 @@ const Modal = ({show, onClose, children, status, description}) => {
               {description}
             </div>
             <CloseButton onClick={closeModal}>&times;</CloseButton>
+          {status && (<>
+            <GifImage src={congratsgif} alt="Animated GIF" />
+            <ShiningText>Ohh !!!!! That's Correct</ShiningText>
+            </>
+          )
+          }
+            {!status && (  <GifImage src={learngif} alt="Animated GIF" />)}
+          </LeftSide>
+          <RightSide>
+          <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '18px', lineHeight: '1.5', color: '#333', textAlign: 'justify' }}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies, quam eu facilisis sollicitudin, quam purus condimentum dolor, ut dapibus justo libero non odio. Nullam vel arcu ut neque volutpat fringilla. Quisque in tellus id justo malesuada ultrices. Sed in ante vitae nisi hendrerit convallis.
+        </div>
+                    <CloseButton onClick={closeModal}>&times;</CloseButton>
+
             <Button
               text="RESUME"
               icon={<StartIcon />}

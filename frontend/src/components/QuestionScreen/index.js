@@ -15,6 +15,7 @@ import Question from "./Question";
 import QuizHeader from "./QuizHeader";
 import Modal from "./Modal";
 
+
 const CenteredModal = styled.div`
   display: flex;
   align-items: center;
@@ -98,7 +99,9 @@ const QuestionScreen = () => {
   const [showResultModal, setShowResultModal] = useState(false);
   const [isMatched, setIsMatched] = useState(false);
   const [isNotmatched, setIsNotMatched] = useState(false);
+
   const [desc, setdesc] = useState("");
+
   const {
     questions,
     setQuestions,
@@ -122,6 +125,7 @@ const QuestionScreen = () => {
       selectedAnswer.length === correctAnswers.length &&
       selectedAnswer.every((answer) => correctAnswers.includes(answer));
 
+
     setResult([...result, {...currentQuestion, selectedAnswer, isMatch}]);
     setIsMatched(isMatch);
     setIsNotMatched(!isMatch);
@@ -142,12 +146,8 @@ const QuestionScreen = () => {
   const handleAnswerSelection = (e) => {
     const {name, checked} = e.target;
 
-    if (
-      type === "MCQs" ||
-      type === "boolean" ||
-      type === "image" ||
-      type === "audio"
-    ) {
+
+    if (type === 'MCQs' || type === 'boolean'|| type==='image'|| type==='audio') {
       if (checked) {
         setSelectedAnswer([name]);
       }
@@ -162,6 +162,34 @@ const QuestionScreen = () => {
   const handleCloseModal = () => {
     setIsMatched(false);
   };
+  const handleShowModal = () => {
+    setIsMatched(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsMatched(false);
+  };
+  const handleshowmodelcorrect = () => {
+    setIsNotMatched(true);
+  }
+  const handleclosemodelcorrect = () => {
+    setIsNotMatched(false);
+  }
+
+  useEffect(() => {
+    if (isMatched) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    } else {
+      document.body.style.overflow = 'auto'; // Allow scrolling
+    }
+  }, [isMatched]);
+  useEffect(() => {
+    if (isNotmatched) {
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    } else {
+      document.body.style.overflow = 'auto'; // Allow scrolling
+    }
+  }, [isNotmatched]);
 
   const handleclosemodelcorrect = () => {
     setIsNotMatched(false);
@@ -292,63 +320,53 @@ const QuestionScreen = () => {
   return (
     <div class="container">
       <div class="code">
-        <PageCenter>
-          <LogoContainer>
-            <AppLogo />
-          </LogoContainer>
-          <QuizContainer selectedAnswer={selectedAnswer.length > 0}>
-            <QuizHeader
-              activeQuestion={activeQuestion}
-              totalQuestions={quizDetails.totalQuestions}
-              timer={timer}
-            />
-            <Question
-              question={question}
-              choices={choices}
-              type={type}
-              handleAnswerSelection={handleAnswerSelection}
-              selectedAnswer={selectedAnswer}
-            />
-            <ButtonWrapper>
-              <Button
-                text={
-                  activeQuestion === questions.length - 1 ? "Finish" : "Next"
-                }
-                onClick={onClickNext}
-                icon={<Next />}
-                iconPosition="right"
-                disabled={selectedAnswer.length === 0}
-              />
-            </ButtonWrapper>
-          </QuizContainer>
-          {isMatched && increase_score}
-          {isMatched && (
-            <Modal
-              show={handleShowModal}
-              onClose={handleCloseModal}
-              status={1}
-              description={desc}
-            />
-          )}
-          {isNotmatched && (
-            <Modal
-              show={handleshowmodelcorrect}
-              onClose={handleclosemodelcorrect}
-              status={0}
-              description={desc}
-            />
-          )}
-          {(showTimerModal || showResultModal) && (
-            <ModalWrapper
-              title={showResultModal ? "Done!" : "Your time is up!"}
-              subtitle={`You have attempted ${result.length} questions in total.`}
-              onClick={handleModal}
-              icon={showResultModal ? <CheckIcon /> : <TimerIcon />}
-              buttonTitle="SHOW RESULT"
-            />
-          )}
-        </PageCenter>
-      </div>
+    <PageCenter>
+      <LogoContainer>
+        <AppLogo />
+      </LogoContainer>
+      <QuizContainer selectedAnswer={selectedAnswer.length > 0}>
+        <QuizHeader
+          activeQuestion={activeQuestion}
+          totalQuestions={quizDetails.totalQuestions}
+          timer={timer}
+        />
+        <Question
+          question={question}
+          choices={choices}
+          type={type}
+          handleAnswerSelection={handleAnswerSelection}
+          selectedAnswer={selectedAnswer}
+        />
+        <ButtonWrapper>
+          <Button
+            text={activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
+            onClick={onClickNext}
+            icon={<Next />}
+            iconPosition="right"
+            disabled={selectedAnswer.length === 0}
+          />
+        </ButtonWrapper>
+      </QuizContainer>
+      {(isMatched) && (
+        <Modal show={handleShowModal} onClose={handleCloseModal} status={1}/>
+
+      )}
+      {(isNotmatched) && (
+        <Modal show={handleshowmodelcorrect} onClose={handleclosemodelcorrect} status={0}/>
+        
+      )}
+      {(showTimerModal || showResultModal) && (
+        <ModalWrapper
+          title={showResultModal ? 'Done!' : 'Your time is up!'}
+          subtitle={`You have attempted ${result.length} questions in total.`}
+          onClick={handleModal}
+          icon={showResultModal ? <CheckIcon /> : <TimerIcon />}
+          buttonTitle="SHOW RESULT"
+        />
+      )}
+    </PageCenter>
+    </div>
+
 
       <div className="table">
         <table>
