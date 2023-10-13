@@ -15,7 +15,7 @@ function Main() {
     let timeoutDuration = 1000; 
   
     if (currentScreen === ScreenTypes.QuestionScreen || currentScreen === ScreenTypes.ResultScreen) {
-      timeoutDuration = 100000; 
+      timeoutDuration = 2000000; 
     }
     const timeout = setTimeout(() => {
       setCurrentScreen(ScreenTypes.QuizDetailsScreen);

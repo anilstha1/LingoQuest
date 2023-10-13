@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import styled from 'styled-components';
-import { AppLogo, CheckIcon, Next, TimerIcon } from '../../config/icons';
-import { useQuiz } from '../../context/QuizContext';
-import { useTimer } from '../../hooks';
-import { device } from '../../styles/BreakPoints';
-import { PageCenter } from '../../styles/Global';
-import { ScreenTypes } from '../../types';
-import Button from '../ui/Button';
-import ModalWrapper from '../ui/ModalWrapper';
-import Question from './Question';
-import QuizHeader from './QuizHeader';
-import Modal from './Modal';
+import React, {useState, useEffect} from "react";
+import "./App.css";
+import axios from "axios";
+import {useUser} from "../../context/userContext";
+import styled from "styled-components";
+import {AppLogo, CheckIcon, Next, TimerIcon} from "../../config/icons";
+import {useQuiz} from "../../context/QuizContext";
+import {useTimer} from "../../hooks";
+import {device} from "../../styles/BreakPoints";
+import {PageCenter} from "../../styles/Global";
+import {ScreenTypes} from "../../types";
+import Button from "../ui/Button";
+import ModalWrapper from "../ui/ModalWrapper";
+import Question from "./Question";
+import QuizHeader from "./QuizHeader";
+import Modal from "./Modal";
 
 const CenteredModal = styled.div`
   display: flex;
@@ -37,7 +39,7 @@ const CenteredModal = styled.div`
 const QuizContainer = styled.div`
   width: 900px;
   min-height: 500px;
-  background: ${({ theme }) => theme.colors.white};
+  background: ${({theme}) => theme.colors.white};
   border-radius: 4px;
   padding: 10px 60px 80px 60px;
   margin-bottom: 70px;
@@ -50,8 +52,10 @@ const QuizContainer = styled.div`
     span {
       svg {
         path {
-          fill: ${({ selectedAnswer, theme }) =>
-            selectedAnswer ? `${theme.colors.white}` : `${theme.colors.darkGrayText}`};
+          fill: ${({selectedAnswer, theme}) =>
+            selectedAnswer
+              ? `${theme.colors.white}`
+              : `${theme.colors.darkGrayText}`};
         }
       }
     }
@@ -60,7 +64,7 @@ const QuizContainer = styled.div`
 
 const LogoContainer = styled.div`
   margin-top: 5px;
-  margin-bottom:20px;
+  margin-bottom: 20px;
   @media ${device.md} {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -87,10 +91,14 @@ const ButtonWrapper = styled.div`
 const QuestionScreen = () => {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState([]);
+  const [users, setusers] = useState([]);
+  const {userName, totalScore, changetotalScore} = useUser();
+  const [iscalled, setIscalled] = useState(true);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   const [isMatched, setIsMatched] = useState(false);
   const [isNotmatched, setIsNotMatched] = useState(false);
+  const [desc, setdesc] = useState("");
   const {
     questions,
     setQuestions,
@@ -105,16 +113,21 @@ const QuestionScreen = () => {
 
   const currentQuestion = questions[activeQuestion];
 
-  const { question, type, choices, correctAnswers } = currentQuestion;
+  const {question, type, choices, correctAnswers, description} =
+    currentQuestion;
 
   const onClickNext = () => {
+    setdesc(description);
     const isMatch =
       selectedAnswer.length === correctAnswers.length &&
       selectedAnswer.every((answer) => correctAnswers.includes(answer));
 
-    setResult([...result, { ...currentQuestion, selectedAnswer, isMatch }]);
-    setIsMatched(isMatch)
-    setIsNotMatched(!isMatch)
+    setResult([...result, {...currentQuestion, selectedAnswer, isMatch}]);
+    setIsMatched(isMatch);
+    setIsNotMatched(!isMatch);
+    setResult([...result, {...currentQuestion, selectedAnswer, isMatch}]);
+    setIsMatched(isMatch);
+    setIsNotMatched(!isMatch);
 
     if (activeQuestion !== questions.length - 1) {
       setActiveQuestion((prev) => prev + 1);
@@ -127,9 +140,14 @@ const QuestionScreen = () => {
   };
 
   const handleAnswerSelection = (e) => {
-    const { name, checked } = e.target;
+    const {name, checked} = e.target;
 
-    if (type === 'MCQs' || type === 'boolean'|| type==='image'|| type==='audio') {
+    if (
+      type === "MCQs" ||
+      type === "boolean" ||
+      type === "image" ||
+      type === "audio"
+    ) {
       if (checked) {
         setSelectedAnswer([name]);
       }
@@ -138,122 +156,220 @@ const QuestionScreen = () => {
 
   const handleModal = () => {
     setCurrentScreen(ScreenTypes.ResultScreen);
-    document.body.style.overflow = 'auto';
-  };
-  const handleShowModal = () => {
-    setIsMatched(true);
+    document.body.style.overflow = "auto";
   };
 
   const handleCloseModal = () => {
     setIsMatched(false);
   };
-  const handleshowmodelcorrect = () => {
-    setIsNotMatched(true);
-  }
+
   const handleclosemodelcorrect = () => {
     setIsNotMatched(false);
-  }
+  };
+  const handleShowModal = () => {
+    setIsMatched(true);
+  };
+
+  const handleshowmodelcorrect = () => {
+    setIsNotMatched(true);
+  };
 
   useEffect(() => {
     if (isMatched) {
-      document.body.style.overflow = 'hidden'; // Prevent scrolling
+      document.body.style.overflow = "hidden"; // Prevent scrolling
     } else {
-      document.body.style.overflow = 'auto'; // Allow scrolling
+      document.body.style.overflow = "auto"; // Allow scrolling
     }
   }, [isMatched]);
   useEffect(() => {
     if (isNotmatched) {
-      document.body.style.overflow = 'hidden'; // Prevent scrolling
+      document.body.style.overflow = "hidden"; // Prevent scrolling
     } else {
-      document.body.style.overflow = 'auto'; // Allow scrolling
+      document.body.style.overflow = "auto"; // Allow scrolling
+    }
+  }, [isNotmatched]);
+
+  useEffect(() => {
+    if (isMatched) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Allow scrolling
+    }
+  }, [isMatched]);
+  useEffect(() => {
+    if (isNotmatched) {
+      document.body.style.overflow = "hidden"; // Prevent scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Allow scrolling
     }
   }, [isNotmatched]);
 
   useEffect(() => {
     if (showTimerModal || showResultModal) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
   }, [showTimerModal, showResultModal]);
 
-  useTimer(timer, quizDetails, setEndTime, setTimer, setShowTimerModal, showResultModal);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      axios
+        .get("http://localhost:8000/users/get")
+        .then((response) => {
+          // Handle the successful response here
+          console.log("Data:", response.data);
+          const userdata = response.data;
+
+          const uniqueNicknames = {};
+          const result = [];
+
+          for (const obj of userdata) {
+            if (!uniqueNicknames[obj.nickname]) {
+              uniqueNicknames[obj.nickname] = true;
+              result.push(obj);
+            }
+          }
+          console.log(result);
+          setusers(result);
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error("Error:", error);
+        });
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [users]);
+
+  useTimer(
+    timer,
+    quizDetails,
+    setEndTime,
+    setTimer,
+    setShowTimerModal,
+    showResultModal
+  );
+  const increase_score = () => {
+    if (iscalled) {
+      console.log("increase score called");
+      changetotalScore(totalScore + 10);
+      // totalScore += 10;
+      const user = {
+        nickname: userName,
+        room: "123",
+        totalScore: totalScore,
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(user), // Convert data to JSON format
+      };
+
+      // Make the POST request
+      fetch("http://localhost:8000/users/add", requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Parse the response JSON if needed
+        })
+        .then((data) => {
+          // Handle the successful response and JSON data here
+          console.log("Data:", data);
+        })
+        .catch((error) => {
+          // Handle any errors that occurred during the request
+          console.error("Error:", error);
+        });
+      setIscalled(false);
+    }
+  };
 
   return (
     <div class="container">
       <div class="code">
-    <PageCenter>
-      <LogoContainer>
-        <AppLogo />
-      </LogoContainer>
-      <QuizContainer selectedAnswer={selectedAnswer.length > 0}>
-        <QuizHeader
-          activeQuestion={activeQuestion}
-          totalQuestions={quizDetails.totalQuestions}
-          timer={timer}
-        />
-        <Question
-          question={question}
-          choices={choices}
-          type={type}
-          handleAnswerSelection={handleAnswerSelection}
-          selectedAnswer={selectedAnswer}
-        />
-        <ButtonWrapper>
-          <Button
-            text={activeQuestion === questions.length - 1 ? 'Finish' : 'Next'}
-            onClick={onClickNext}
-            icon={<Next />}
-            iconPosition="right"
-            disabled={selectedAnswer.length === 0}
-          />
-        </ButtonWrapper>
-      </QuizContainer>
-      {(isMatched) && (
-        <Modal show={handleShowModal} onClose={handleCloseModal} status={1}/>
+        <PageCenter>
+          <LogoContainer>
+            <AppLogo />
+          </LogoContainer>
+          <QuizContainer selectedAnswer={selectedAnswer.length > 0}>
+            <QuizHeader
+              activeQuestion={activeQuestion}
+              totalQuestions={quizDetails.totalQuestions}
+              timer={timer}
+            />
+            <Question
+              question={question}
+              choices={choices}
+              type={type}
+              handleAnswerSelection={handleAnswerSelection}
+              selectedAnswer={selectedAnswer}
+            />
+            <ButtonWrapper>
+              <Button
+                text={
+                  activeQuestion === questions.length - 1 ? "Finish" : "Next"
+                }
+                onClick={onClickNext}
+                icon={<Next />}
+                iconPosition="right"
+                disabled={selectedAnswer.length === 0}
+              />
+            </ButtonWrapper>
+          </QuizContainer>
+          {isMatched && increase_score}
+          {isMatched && (
+            <Modal
+              show={handleShowModal}
+              onClose={handleCloseModal}
+              status={1}
+              description={desc}
+            />
+          )}
+          {isNotmatched && (
+            <Modal
+              show={handleshowmodelcorrect}
+              onClose={handleclosemodelcorrect}
+              status={0}
+              description={desc}
+            />
+          )}
+          {(showTimerModal || showResultModal) && (
+            <ModalWrapper
+              title={showResultModal ? "Done!" : "Your time is up!"}
+              subtitle={`You have attempted ${result.length} questions in total.`}
+              onClick={handleModal}
+              icon={showResultModal ? <CheckIcon /> : <TimerIcon />}
+              buttonTitle="SHOW RESULT"
+            />
+          )}
+        </PageCenter>
+      </div>
 
-      )}
-      {(isNotmatched) && (
-        <Modal show={handleshowmodelcorrect} onClose={handleclosemodelcorrect} status={0}/>
-        
-      )}
-      {(showTimerModal || showResultModal) && (
-        <ModalWrapper
-          title={showResultModal ? 'Done!' : 'Your time is up!'}
-          subtitle={`You have attempted ${result.length} questions in total.`}
-          onClick={handleModal}
-          icon={showResultModal ? <CheckIcon /> : <TimerIcon />}
-          buttonTitle="SHOW RESULT"
-        />
-      )}
-    </PageCenter>
-    </div>
-
-<div className="table">
-    <table>
-            <thead>
+      <div className="table">
+        <table>
+          <thead>
+            <tr>
+              <th>Players Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => {
+              return (
                 <tr>
-                    <th>Players Name</th>
-                    <th>Score</th>
+                  <td>{user.nickname}</td>
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>John Doe</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Jane Smith</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>Bob Johnson</td>
-                    <td>0</td>
-                </tr>
-            </tbody>
+              );
+            })}
+          </tbody>
         </table>
-        </div>
+      </div>
     </div>
   );
 };
 
 export default QuestionScreen;
-

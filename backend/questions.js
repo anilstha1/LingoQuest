@@ -8,7 +8,7 @@ const questions = express.Router();
 questions.get("/getall", async (req, res) => {
   try {
     const questions_collection = await quiz.find();
-    console.log(questions_collection);
+    // console.log(questions_collection);
     // console.log(questions_collection);
     const questionsByLanguage = {};
 
@@ -53,7 +53,7 @@ questions.get("/get", async (req, res) => {
 
 // add user
 questions.post("/add", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const questions_collection = await quiz.find();
 
@@ -70,8 +70,8 @@ questions.post("/add", async (req, res) => {
       questions: addquestion,
     });
     addquiz.save();
-    console.log(addquestion);
-    console.log(addquiz);
+    // console.log(addquestion);
+    // console.log(addquiz);
 
     res.status(200).json(addquiz);
   } catch (err) {

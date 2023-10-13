@@ -38,6 +38,7 @@ const QuizProvider = ({ children }) => {
   const [currentScreen, setCurrentScreen] = useState(initialState.currentScreen);
 
   const [questions, setQuestions] = useState(quiz[initialState.quizTopic].questions);
+  const [usercontext, setusercontext] = useState("");
 
   const {
     questions: quizQuestions,
@@ -46,6 +47,12 @@ const QuizProvider = ({ children }) => {
     totalScore,
   } = quiz[quizTopic];
 
+  const changeuser = (to) => {
+    console.log("User is being call", to);
+    setusercontext(to);
+    console.log("name of user", usercontext);
+  };
+
   const selectQuizTopic = (topic) => {
     setQuizTopic(topic);
   };
@@ -53,15 +60,13 @@ const QuizProvider = ({ children }) => {
   useEffect(() => {
     setTimer(totalTime);
     setQuestions(quizQuestions);
-
-  }, );
+  });
 
   const quizDetails = {
     totalQuestions,
     totalScore,
     totalTime,
     selectedQuizTopic: quizTopic,
-    
   };
 
   const quizContextValue = {
@@ -78,6 +83,8 @@ const QuizProvider = ({ children }) => {
     setTimer,
     endTime,
     setEndTime,
+    usercontext,
+    changeuser,
   };
 
   return <QuizContext.Provider value={quizContextValue}>{children}</QuizContext.Provider>;
